@@ -14,5 +14,16 @@ pipeline {
                 sh "docker run apiapp npm test"
             }
         }
+        stage('Deploy Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+                    sh '''
+                    docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
+                    docker tag apiapp $DOCKERHUB_USER/testapp
+                    docker push $DOCKERHUB_USER/testapp
+                    '''
+                }
+            }
+        }
     }
 }
