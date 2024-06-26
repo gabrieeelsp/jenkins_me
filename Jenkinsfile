@@ -9,5 +9,10 @@ pipeline {
                 '''
             }
         }
+        stage('Run tests') {
+            steps {
+                sh "docker run apiapp npm test"
+            }
+        }
     }
 }
